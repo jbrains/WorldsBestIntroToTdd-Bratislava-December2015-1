@@ -18,6 +18,14 @@ public class FindPriceInMemoryCatalogTest {
         Assert.assertEquals(price, catalog.findPrice("12345"));
     }
 
+    @Test
+    public void productNotFound() throws Exception {
+        final InMemoryCatalog catalog = new InMemoryCatalog(
+                Collections.emptyMap());
+
+        Assert.assertEquals(null, catalog.findPrice("12345"));
+    }
+
     public static class InMemoryCatalog {
         private final Map<String, Price> pricesByBarcode;
 
