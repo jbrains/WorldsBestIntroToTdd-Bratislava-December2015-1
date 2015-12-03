@@ -1,11 +1,12 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.BarcodeScannedListener;
+import ca.jbrains.pos.CommandProcessor;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -67,21 +68,6 @@ public class ReadBarcodesFromAReaderTest {
     }
 
     private void process(Reader textCommandSource) throws IOException {
-        final BufferedReader bufferedReader
-                = new BufferedReader(textCommandSource);
-
-        bufferedReader.lines()
-                .filter(
-                        (line) -> !line.isEmpty()
-                )
-                .forEach(
-                        (line) -> barcodeScannedListener.onBarcode(line)
-                );
-    }
-
-    public interface BarcodeScannedListener {
-        // CONTRACT
-        // barcode cannot be empty
-        void onBarcode(String barcode);
+        new CommandProcessor(barcodeScannedListener).processCommands(textCommandSource);
     }
 }
