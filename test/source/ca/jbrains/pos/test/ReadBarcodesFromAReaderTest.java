@@ -80,6 +80,8 @@ public class ReadBarcodesFromAReaderTest {
     }
 
     public interface BarcodeScannedListener {
+        // CONTRACT
+        // barcode cannot be empty
         void onBarcode(String barcode);
     }
 }

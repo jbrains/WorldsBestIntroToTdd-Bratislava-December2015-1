@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.test.ReadBarcodesFromAReaderTest.BarcodeScannedListener;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
@@ -60,7 +61,7 @@ public class SellOneItemControllerTest {
         }
     }
 
-    public static class SellOneItemController {
+    public static class SellOneItemController implements BarcodeScannedListener {
         private final Catalog catalog;
         private final Display display;
 
