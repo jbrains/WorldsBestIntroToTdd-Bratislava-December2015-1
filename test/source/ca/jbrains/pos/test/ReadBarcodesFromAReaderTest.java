@@ -26,9 +26,18 @@ public class ReadBarcodesFromAReaderTest {
         process(new StringReader("::barcode::"));
     }
 
+    @Test
+    public void noBarcodes() throws Exception {
+        context.checking(new Expectations() {{
+        }});
+
+        process(new StringReader(""));
+    }
+
     private void process(Reader textCommandSource) throws IOException {
         final String line = new BufferedReader(textCommandSource).readLine();
-        barcodeScannedListener.onBarcode(line);
+        if (line != null)
+            barcodeScannedListener.onBarcode(line);
     }
 
     public interface BarcodeScannedListener {
