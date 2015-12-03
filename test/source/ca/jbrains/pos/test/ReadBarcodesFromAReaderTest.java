@@ -34,10 +34,29 @@ public class ReadBarcodesFromAReaderTest {
         process(new StringReader(""));
     }
 
+    @Test
+    public void manyBarcodes() throws Exception {
+        context.checking(new Expectations() {{
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 1::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 2::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 3::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 4::"));
+        }});
+
+        process(new StringReader(
+                "::barcode 1::\n" +
+                        "::barcode 2::\n" +
+                        "::barcode 3::\n" +
+                        "::barcode 4::"));
+    }
+
     private void process(Reader textCommandSource) throws IOException {
-        final String line = new BufferedReader(textCommandSource).readLine();
-        if (line != null)
-            barcodeScannedListener.onBarcode(line);
+        final BufferedReader bufferedReader
+                = new BufferedReader(textCommandSource);
+
+        bufferedReader.lines().forEach(
+                (line) -> barcodeScannedListener.onBarcode(line)
+        );
     }
 
     public interface BarcodeScannedListener {
