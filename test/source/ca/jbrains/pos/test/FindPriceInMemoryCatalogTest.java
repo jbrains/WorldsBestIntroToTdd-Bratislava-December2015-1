@@ -53,10 +53,7 @@ public class FindPriceInMemoryCatalogTest {
         }
 
         public Price findPrice(String barcode) {
-            if (pricesByBarcode.containsKey(barcode))
-                return pricesByBarcode.get(barcode);
-            else
-                return null;
+            return pricesByBarcode.get(barcode);
         }
     }
 }
