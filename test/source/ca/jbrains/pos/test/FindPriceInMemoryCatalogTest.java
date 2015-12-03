@@ -40,7 +40,11 @@ public class FindPriceInMemoryCatalogTest {
     @Test
     public void productNotFound() throws Exception {
         final InMemoryCatalog catalog = new InMemoryCatalog(
-                Collections.emptyMap());
+                new HashMap() {{
+            put("definitely not 12345", new Price());
+            put("not 12345", new Price());
+            put("anything in the world except 12345", new Price());
+        }});
 
         Assert.assertEquals(null, catalog.findPrice("12345"));
     }
