@@ -22,10 +22,4 @@ public class BarcodeScannedController implements BarcodeScannedListener {
             display.displayPrice(price);
         }
     }
-
-    public void onTotal() {
-        final Price total = shopcartModel.getTotal();
-        if (0 != total.centsValue())
-            display.displayTotal(total);
-    }
 }

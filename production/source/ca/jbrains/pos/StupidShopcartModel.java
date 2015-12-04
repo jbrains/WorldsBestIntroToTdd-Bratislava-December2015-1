@@ -12,4 +12,9 @@ class StupidShopcartModel implements ShopcartModel {
     public Price getTotal() {
         return priceOfProductScanned;
     }
+
+    @Override
+    public boolean isPurchaseInProgress() {
+        return 0 != getTotal().centsValue();
+    }
 }
