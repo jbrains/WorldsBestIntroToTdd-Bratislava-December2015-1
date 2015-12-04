@@ -1,13 +1,12 @@
 package ca.jbrains.pos;
 
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.Collections;
 
 public class VirtualPointOfSaleTerminal {
     public static void main(String[] args) {
         final CommandProcessor commandProcessor = new CommandProcessor(
-                new SellOneItemController(
+                new SellMultipleItemsController(
                         new InMemoryCatalog(
                                 Collections.singletonMap("8586009260819", Price.cents(70))
                         ),

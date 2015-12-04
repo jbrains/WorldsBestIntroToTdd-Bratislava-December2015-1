@@ -3,13 +3,13 @@ package ca.jbrains.pos.test;
 import ca.jbrains.pos.Catalog;
 import ca.jbrains.pos.Display;
 import ca.jbrains.pos.Price;
-import ca.jbrains.pos.SellOneItemController;
+import ca.jbrains.pos.SellMultipleItemsController;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class SellOneItemControllerTest {
+public class HandleBarcodeScannedTest {
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -26,8 +26,8 @@ public class SellOneItemControllerTest {
             oneOf(display).displayPrice(with(price));
         }});
 
-        final SellOneItemController controller
-                = new SellOneItemController(catalog, display);
+        final SellMultipleItemsController controller
+                = new SellMultipleItemsController(catalog, display);
         controller.onBarcode("12345");
     }
 
@@ -43,8 +43,8 @@ public class SellOneItemControllerTest {
             oneOf(display).displayProductNotFoundMessage(with("12345"));
         }});
 
-        final SellOneItemController controller
-                = new SellOneItemController(catalog, display);
+        final SellMultipleItemsController controller
+                = new SellMultipleItemsController(catalog, display);
         controller.onBarcode("12345");
     }
 

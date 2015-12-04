@@ -1,10 +1,10 @@
 package ca.jbrains.pos;
 
-public class SellOneItemController implements BarcodeScannedListener {
+public class SellMultipleItemsController implements BarcodeScannedListener {
     private final Catalog catalog;
     private final Display display;
 
-    public SellOneItemController(Catalog catalog, Display display) {
+    public SellMultipleItemsController(Catalog catalog, Display display) {
         this.catalog = catalog;
         this.display = display;
     }
@@ -17,5 +17,9 @@ public class SellOneItemController implements BarcodeScannedListener {
             display.displayProductNotFoundMessage(barcode);
         else
             display.displayPrice(price);
+    }
+
+    public void onTotal() {
+        // This method intentionally left blank
     }
 }
