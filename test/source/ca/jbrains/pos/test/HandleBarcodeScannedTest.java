@@ -22,6 +22,8 @@ public class HandleBarcodeScannedTest {
             allowing(catalog).findPrice(with("12345"));
             will(returnValue(price));
 
+            // REFACTOR I expect two functions with the same signature.
+            // It's easy to replace this with a more abstract event!
             oneOf(display).displayPrice(with(price));
             oneOf(shopcartModel).onProductPlacedOnHold(with(price));
         }});
