@@ -6,7 +6,7 @@ import java.util.Collections;
 public class VirtualPointOfSaleTerminal {
     public static void main(String[] args) {
         final CommandProcessor commandProcessor = new CommandProcessor(
-                new SellMultipleItemsController(
+                new BarcodeScannedController(
                         new InMemoryCatalog(
                                 Collections.singletonMap("8586009260819", Price.cents(70))
                         ),
@@ -25,8 +25,8 @@ public class VirtualPointOfSaleTerminal {
                             public void displayTotal(Price total) {
                                 throw new UnsupportedOperationException("Not yet implemented.");
                             }
-                        }
-                ));
+                        },
+                        null));
 
         commandProcessor.processCommands(new InputStreamReader(System.in));
     }

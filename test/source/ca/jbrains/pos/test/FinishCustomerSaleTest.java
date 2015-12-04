@@ -1,11 +1,9 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.Catalog;
-import ca.jbrains.pos.Display;
-import ca.jbrains.pos.Price;
-import ca.jbrains.pos.SellMultipleItemsController;
+import ca.jbrains.pos.*;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -14,36 +12,40 @@ public class FinishCustomerSaleTest {
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Test
-    public void zeroBarcodes() throws Exception {
+    public void shopcartEmpty() throws Exception {
         final Display display = context.mock(Display.class);
+        final ShopcartModel shopcartModel = context.mock(ShopcartModel.class);
 
         context.checking(new Expectations() {{
+            allowing(shopcartModel).getTotal();
+            will(returnValue(Price.cents(0)));
+
             never(display);
         }});
 
-        final SellMultipleItemsController controller
-                = new SellMultipleItemsController(null, display);
+        final BarcodeScannedController controller
+                = new BarcodeScannedController(null, display, shopcartModel);
         controller.onTotal();
     }
 
     @Test
-    public void oneBarcode() throws Exception {
+    public void shopcartNotEmpty() throws Exception {
         final Catalog catalog = context.mock(Catalog.class);
         final Display display = context.mock(Display.class);
-        final Price price = Price.cents(750);
+        final ShopcartModel shopcartModel = context.mock(ShopcartModel.class);
+
+        final Price amount = Price.cents(750);
 
         context.checking(new Expectations() {{
-            ignoring(display).displayPrice(with(any(Price.class)));
+            allowing(shopcartModel).getTotal();
+            will(returnValue(amount));
 
-            allowing(catalog).findPrice(with("12345"));
-            will(returnValue(price));
-
-            oneOf(display).displayTotal(price);
+            oneOf(display).displayTotal(amount);
         }});
 
-        final SellMultipleItemsController controller
-                = new SellMultipleItemsController(catalog, display);
-        controller.onBarcode("12345");
+        final BarcodeScannedController controller
+                = new BarcodeScannedController(catalog, display, shopcartModel);
         controller.onTotal();
     }
+
 }

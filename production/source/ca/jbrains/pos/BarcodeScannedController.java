@@ -1,30 +1,31 @@
 package ca.jbrains.pos;
 
-public class SellMultipleItemsController implements BarcodeScannedListener {
+public class BarcodeScannedController implements BarcodeScannedListener {
     private final Catalog catalog;
     private final Display display;
+    private final ShopcartModel shopcartModel;
 
-    private Price priceOfProductScanned;
-
-    public SellMultipleItemsController(Catalog catalog, Display display) {
+    public BarcodeScannedController(Catalog catalog, Display display, ShopcartModel shopcartModel) {
         this.catalog = catalog;
         this.display = display;
+        this.shopcartModel = shopcartModel;
     }
 
     // CONTRACT
     // barcode cannot be empty
     public void onBarcode(String barcode) {
         final Price price = catalog.findPrice(barcode);
-        this.priceOfProductScanned = price;
         if (price == null)
             display.displayProductNotFoundMessage(barcode);
-        else
+        else {
+            shopcartModel.onProductPlacedOnHold(price);
             display.displayPrice(price);
+        }
     }
 
     public void onTotal() {
-        // This method intentionally left blank
-        if (priceOfProductScanned != null)
-            display.displayTotal(priceOfProductScanned);
+        final Price total = shopcartModel.getTotal();
+        if (0 != total.centsValue())
+            display.displayTotal(total);
     }
 }

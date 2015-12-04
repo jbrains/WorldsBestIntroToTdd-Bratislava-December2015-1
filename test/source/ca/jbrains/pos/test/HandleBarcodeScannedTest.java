@@ -1,9 +1,6 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.Catalog;
-import ca.jbrains.pos.Display;
-import ca.jbrains.pos.Price;
-import ca.jbrains.pos.SellMultipleItemsController;
+import ca.jbrains.pos.*;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
@@ -17,6 +14,8 @@ public class HandleBarcodeScannedTest {
     public void productFound() throws Exception {
         final Catalog catalog = context.mock(Catalog.class);
         final Display display = context.mock(Display.class);
+        final ShopcartModel shopcartModel = context.mock(ShopcartModel.class);
+
         final Price price = Price.cents(795);
 
         context.checking(new Expectations() {{
@@ -24,10 +23,11 @@ public class HandleBarcodeScannedTest {
             will(returnValue(price));
 
             oneOf(display).displayPrice(with(price));
+            oneOf(shopcartModel).onProductPlacedOnHold(with(price));
         }});
 
-        final SellMultipleItemsController controller
-                = new SellMultipleItemsController(catalog, display);
+        final BarcodeScannedController controller
+                = new BarcodeScannedController(catalog, display, shopcartModel);
         controller.onBarcode("12345");
     }
 
@@ -43,9 +43,8 @@ public class HandleBarcodeScannedTest {
             oneOf(display).displayProductNotFoundMessage(with("12345"));
         }});
 
-        final SellMultipleItemsController controller
-                = new SellMultipleItemsController(catalog, display);
+        final BarcodeScannedController controller
+                = new BarcodeScannedController(catalog, display, null);
         controller.onBarcode("12345");
     }
-
 }
